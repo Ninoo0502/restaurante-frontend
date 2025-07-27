@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import FormularioRestaurante from './components/FormularioRestaurante';
+import ListaRestaurantes from './components/ListaRestaurantes';
 import api from './api';
 
 function App() {
   const [restaurantes, setRestaurantes] = useState([]);
 
-  useEffect(() => {
+  const cargarRestaurantes = () => {
     api.get('/restaurantes')
       .then(response => setRestaurantes(response.data))
-      .catch(error => console.error('Error:', error));
+      .catch(error => console.error('Error al cargar restaurantes:', error));
+  };
+
+  useEffect(() => {
+    cargarRestaurantes();
   }, []);
 
   return (
     <div>
       <h1>Lista de Restaurantes</h1>
-      <ul>
-        {restaurantes.map(restaurante => (
-          <li key={restaurante.id}>
-            {restaurante.nombre} - {restaurante.direccion}
-          </li>
-        ))}
-      </ul>
+      <FormularioRestaurante onSuccess={cargarRestaurantes} />
+      <ListaRestaurantes
+        restaurantes={restaurantes}
+        onDeleteSuccess={cargarRestaurantes}
+      />
     </div>
   );
 }
