@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import FormularioRestaurante from './components/FormularioRestaurante';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ListaRestaurantes from './components/ListaRestaurantes';
+import EditarRestaurante from './components/EditarRestaurante';
 import api from './api';
+import { useEffect, useState } from 'react';
+import './App.css';
 
 function App() {
   const [restaurantes, setRestaurantes] = useState([]);
@@ -17,14 +20,22 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Lista de Restaurantes</h1>
-      <FormularioRestaurante onSuccess={cargarRestaurantes} />
-      <ListaRestaurantes
-        restaurantes={restaurantes}
-        onDeleteSuccess={cargarRestaurantes}
-      />
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div>
+              <ListaRestaurantes
+                restaurantes={restaurantes}
+                onDeleteSuccess={cargarRestaurantes}
+              />
+            </div>
+          }
+        />
+        <Route path="/editar/:id" element={<EditarRestaurante />} />
+      </Routes>
+    </Router>
   );
 }
 
